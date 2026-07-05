@@ -30,14 +30,14 @@ function updateDisplay() {
     display.textContent = formatTime(timeLeft);
 }
 
-// Kalimi në gjendjen kur timer-i ecën (Fsheh butonat, shfaq vetëm Stop)
+// Menaxhimi i pamjes së butonave gjatë punës së timer-it
 function setRunningUI(running) {
     if (running) {
-        controlButtons.style.display = 'none';
-        stopContainer.style.display = 'flex';
+        controlButtons.style.display = 'none'; // Fsheh Edit, Reset, Start
+        stopContainer.style.display = 'flex';  // Shfaq vetëm Stop
     } else {
-        controlButtons.style.display = 'flex';
-        stopContainer.style.display = 'none';
+        controlButtons.style.display = 'flex'; // Rikthen butonat e tjerë
+        stopContainer.style.display = 'none';  // Fsheh Stop
     }
 }
 
@@ -46,7 +46,7 @@ btnStart.addEventListener('click', () => {
     if (isRunning || timeLeft <= 0) return;
     
     isRunning = true;
-    setRunningUI(true); // Ndrysho ndërfaqen
+    setRunningUI(true); // Fsheh butonat menjëherë pas klikimit të Start
 
     timerInterval = setInterval(() => {
         if (timeLeft > 0) {
@@ -65,7 +65,7 @@ btnStart.addEventListener('click', () => {
 btnStop.addEventListener('click', () => {
     clearInterval(timerInterval);
     isRunning = false;
-    setRunningUI(false); // Kthe butonat e tjerë në ekran
+    setRunningUI(false); // Rikthen panelin kryesor të butonave
 });
 
 // Logjika e butonit Edit
@@ -97,7 +97,7 @@ btnReset.addEventListener('click', () => {
     clearInterval(timerInterval);
     isRunning = false;
     setRunningUI(false);
-    timeLeft = 5016; // kthehet te koha e fotos
+    timeLeft = 5016; // Kthehet te koha fillestare
     updateDisplay();
 });
 
