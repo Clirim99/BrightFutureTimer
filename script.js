@@ -17,6 +17,36 @@ const timerContainer = document.getElementById('timer-container');
 const btnFullscreen = document.getElementById('btn-fullscreen');
 const btnFullscreenStop = document.getElementById('btn-fullscreen-stop');
 
+function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+}
+
+function requestFullscreen(element) {
+    if (element.requestFullscreen) {
+        return element.requestFullscreen();
+    }
+    if (element.webkitRequestFullscreen) {
+        return element.webkitRequestFullscreen();
+    }
+    if (element.msRequestFullscreen) {
+        return element.msRequestFullscreen();
+    }
+    return Promise.reject(new Error('Fullscreen API is not supported in this browser.'));
+}
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        return document.exitFullscreen();
+    }
+    if (document.webkitExitFullscreen) {
+        return document.webkitExitFullscreen();
+    }
+    if (document.msExitFullscreen) {
+        return document.msExitFullscreen();
+    }
+    return Promise.reject(new Error('Fullscreen API is not supported in this browser.'));
+}
+
 // Funksioni për kthimin e sekondave në formatin HH:MM:SS
 function formatTime(seconds) {
     const hrs = Math.floor(seconds / 3600);
@@ -48,29 +78,40 @@ function setRunningUI(running) {
 
 // Logjika e kontrollit Fullscreen
 function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        timerContainer.requestFullscreen().catch(err => {
+    const activeElement = getFullscreenElement();
+    if (!activeElement) {
+        requestFullscreen(timerContainer).catch(err => {
             alert(`Gabim gjatë aktivizimit të Fullscreen: ${err.message}`);
         });
     } else {
-        document.exitFullscreen();
+        exitFullscreen().catch(err => {
+            console.error(err);
+        });
+    }
+}
+
+function updateFullscreenButtons() {
+    const isFullscreen = !!getFullscreenElement();
+    if (btnFullscreen) {
+        btnFullscreen.textContent = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
+    }
+    if (btnFullscreenStop) {
+        btnFullscreenStop.textContent = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
     }
 }
 
 // Ndërlidhja e dy butonave me funksionin Fullscreen
-btnFullscreen.addEventListener('click', toggleFullscreen);
-btnFullscreenStop.addEventListener('click', toggleFullscreen);
+if (btnFullscreen) {
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+}
+if (btnFullscreenStop) {
+    btnFullscreenStop.addEventListener('click', toggleFullscreen);
+}
 
 // Përditësimi i tekstit të butonit dinamikisht
-document.addEventListener('fullscreenchange', () => {
-    if (document.fullscreenElement) {
-        btnFullscreen.textContent = "Exit Fullscreen";
-        btnFullscreenStop.textContent = "Exit Fullscreen";
-    } else {
-        btnFullscreen.textContent = "Fullscreen";
-        btnFullscreenStop.textContent = "Fullscreen";
-    }
-});
+document.addEventListener('fullscreenchange', updateFullscreenButtons);
+document.addEventListener('webkitfullscreenchange', updateFullscreenButtons);
+document.addEventListener('msfullscreenchange', updateFullscreenButtons);
 
 // Logjika e butonit Start
 btnStart.addEventListener('click', () => {
@@ -134,3 +175,4 @@ btnReset.addEventListener('click', () => {
 
 // Shfaqja e kohës fillestare në fillim
 updateDisplay();
+updateFullscreenButtons();
