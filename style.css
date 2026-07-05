@@ -164,3 +164,66 @@ body {
         max-width: 100%; /* Edhe butoni stop merr hapësirë të plotë */
     }
 }
+/* Stilet bazë për butonat Fullscreen */
+.btn.fullscreen {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn.fullscreen:hover {
+    background-color: #5a6268;
+}
+
+/* --- LOGJIKA KRYESORE E FULLSCREEN --- */
+
+#timer-container:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff; /* Mund ta ndryshosh sipas dëshirës */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 40px;
+    position: relative; /* Lejon pozicionimin absolut të butonave */
+}
+
+/* Rritja e fotos (logos) në Fullscreen */
+#timer-container:fullscreen .title-logo {
+    max-height: 250px; /* Fotoja rritet ndjeshëm */
+    width: auto;
+    margin-bottom: 20px;
+}
+
+/* Rritja e titullit në Fullscreen */
+#timer-container:fullscreen .timer-title {
+    font-size: 4.5rem; 
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Rritja maksimale e kohëmatësit */
+#timer-container:fullscreen .timer-display {
+    font-size: 15rem; /* Shifrat bëhen gjigande për t'u parë qartë */
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+/* Pozicionimi i butonave poshtë në të djathtë (si kur luan, si kur është stop) */
+#timer-container:fullscreen #control-buttons,
+#timer-container:fullscreen #stop-container {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    display: flex;
+    gap: 15px; /* Hapësirë mes butonave */
+}
+
+/* Madhësia e butonave në Fullscreen */
+#timer-container:fullscreen .btn {
+    font-size: 1.6rem;
+    padding: 15px 35px;
+    border-radius: 8px;
+    cursor: pointer;
+}

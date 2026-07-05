@@ -12,6 +12,11 @@ const btnStop = document.getElementById('btn-stop');
 const controlButtons = document.getElementById('control-buttons');
 const stopContainer = document.getElementById('stop-container');
 
+// Elementet për Fullscreen
+const timerContainer = document.getElementById('timer-container');
+const btnFullscreen = document.getElementById('btn-fullscreen');
+const btnFullscreenStop = document.getElementById('btn-fullscreen-stop');
+
 // Funksioni për kthimin e sekondave në formatin HH:MM:SS
 function formatTime(seconds) {
     const hrs = Math.floor(seconds / 3600);
@@ -33,13 +38,39 @@ function updateDisplay() {
 // Menaxhimi i pamjes së butonave gjatë punës së timer-it
 function setRunningUI(running) {
     if (running) {
-        controlButtons.style.display = 'none'; // Fsheh Edit, Reset, Start
-        stopContainer.style.display = 'flex';  // Shfaq vetëm Stop
+        controlButtons.style.display = 'none'; // Fsheh grupin e parë
+        stopContainer.style.display = 'flex';  // Shfaq Stop + Fullscreen e dytë
     } else {
-        controlButtons.style.display = 'flex'; // Rikthen butonat e tjerë
+        controlButtons.style.display = 'flex'; // Rikthen grupin e parë
         stopContainer.style.display = 'none';  // Fsheh Stop
     }
 }
+
+// Logjika e kontrollit Fullscreen
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        timerContainer.requestFullscreen().catch(err => {
+            alert(`Gabim gjatë aktivizimit të Fullscreen: ${err.message}`);
+        });
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+// Ndërlidhja e dy butonave me funksionin Fullscreen
+btnFullscreen.addEventListener('click', toggleFullscreen);
+btnFullscreenStop.addEventListener('click', toggleFullscreen);
+
+// Përditësimi i tekstit të butonit dinamikisht
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        btnFullscreen.textContent = "Exit Fullscreen";
+        btnFullscreenStop.textContent = "Exit Fullscreen";
+    } else {
+        btnFullscreen.textContent = "Fullscreen";
+        btnFullscreenStop.textContent = "Fullscreen";
+    }
+});
 
 // Logjika e butonit Start
 btnStart.addEventListener('click', () => {
@@ -101,5 +132,5 @@ btnReset.addEventListener('click', () => {
     updateDisplay();
 });
 
-// Shfaqja e kohës fillestare në hapje të faqes
+// Shfaqja e kohës fillestare në fillim
 updateDisplay();
