@@ -1,4 +1,4 @@
-// Koha fillestare e vendosur në sekonda (01:22:56)
+// Koha fillestare në sekonda (01:22:56)
 let timeLeft = 5016; 
 let timerInterval = null;
 let isRunning = false;
@@ -9,8 +9,10 @@ const btnEdit = document.getElementById('btn-edit');
 const btnReset = document.getElementById('btn-reset');
 const btnStart = document.getElementById('btn-start');
 const btnStop = document.getElementById('btn-stop');
+const controlButtons = document.getElementById('control-buttons');
+const stopContainer = document.getElementById('stop-container');
 
-// Kthimi i sekondave në formatin HH:MM:SS
+// Funksioni për kthimin e sekondave në formatin HH:MM:SS
 function formatTime(seconds) {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -28,11 +30,24 @@ function updateDisplay() {
     display.textContent = formatTime(timeLeft);
 }
 
+// Kalimi në gjendjen kur timer-i ecën (Fsheh butonat, shfaq vetëm Stop)
+function setRunningUI(running) {
+    if (running) {
+        controlButtons.style.display = 'none';
+        stopContainer.style.display = 'flex';
+    } else {
+        controlButtons.style.display = 'flex';
+        stopContainer.style.display = 'none';
+    }
+}
+
 // Logjika e butonit Start
 btnStart.addEventListener('click', () => {
     if (isRunning || timeLeft <= 0) return;
     
     isRunning = true;
+    setRunningUI(true); // Ndrysho ndërfaqen
+
     timerInterval = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
@@ -40,6 +55,7 @@ btnStart.addEventListener('click', () => {
         } else {
             clearInterval(timerInterval);
             isRunning = false;
+            setRunningUI(false);
             alert("Koha mbaroi!");
         }
     }, 1000);
@@ -49,9 +65,10 @@ btnStart.addEventListener('click', () => {
 btnStop.addEventListener('click', () => {
     clearInterval(timerInterval);
     isRunning = false;
+    setRunningUI(false); // Kthe butonat e tjerë në ekran
 });
 
-// Logjika e butonit Edit (ndryshimi i kohës me prompt)
+// Logjika e butonit Edit
 btnEdit.addEventListener('click', () => {
     const inputTime = prompt("Vendos kohën (Psh. '01:22:56' ose minutat '90'):");
     if (!inputTime) return;
@@ -75,13 +92,14 @@ btnEdit.addEventListener('click', () => {
     updateDisplay();
 });
 
-// Logjika e butonit Reset (e kthen në kohën fillestare)
+// Logjika e butonit Reset
 btnReset.addEventListener('click', () => {
     clearInterval(timerInterval);
     isRunning = false;
-    timeLeft = 5016; 
+    setRunningUI(false);
+    timeLeft = 5016; // kthehet te koha e fotos
     updateDisplay();
 });
 
-// Shfaqja e kohës sapo hapet faqja
+// Shfaqja e kohës fillestare në hapje të faqes
 updateDisplay();

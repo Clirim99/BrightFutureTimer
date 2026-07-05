@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer Digjital</title>
+    <title>Bright Future Timer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="timer-container">
-        <!-- Titulli që mund të ndryshohet duke klikuar mbi të -->
-        <h1 class="timer-title" contenteditable="true">Provimi pranues në BRIGHT</h1>
+        <div class="header-container">
+            <img src="/Users/tokiomac/Documents/GitHub/BrightFutureTimer/images/BrightFuture.jpg" alt="Bright Future Logo" class="title-logo">
+            <h1 class="timer-title" contenteditable="true">Provimi pranues në BRIGHT</h1>
+        </div>
         
-        <!-- Ekrani i kohës -->
         <div class="timer-display" id="display">01:22:56</div>
 
-        <!-- Katër butonat e kontrollit -->
-        <div class="control-buttons">
+        <div class="control-buttons" id="control-buttons">
             <button id="btn-edit" class="btn edit">Edit Timer</button>
             <button id="btn-reset" class="btn reset">Reset</button>
             <button id="btn-start" class="btn start">Start</button>
+        </div>
+
+        <div id="stop-container" class="stop-container" style="display: none;">
             <button id="btn-stop" class="btn stop">Stop</button>
         </div>
     </div>
