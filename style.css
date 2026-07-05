@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 15px; /* Pakësuar pak që të ketë hapësirë në telefona */
+    padding: 15px; 
 }
 
 /* Kutia kryesore e timer-it */
@@ -34,7 +34,7 @@ body {
     gap: 12px;
     margin-bottom: 25px;
     padding-bottom: 12px;
-    border-bottom: 4px solid #007bff; /* Vija nënshkruese me ngjyrë blu */
+    border-bottom: 4px solid #007bff; 
 }
 
 /* Stili i logos */
@@ -109,121 +109,102 @@ body {
 }
 .btn.stop:hover { background-color: #bd2130; }
 
-
-/* ==========================================================================
-   MEDIA QUERIES (Përshtatja responsive për iPhone-at e vegjël)
-   ========================================================================== */
-
-/* Për pajisje si iPhone 6/7/8/X/12 mini (Më pak se 768px) */
-@media (max-width: 768px) {
-    .timer-title {
-        font-size: 1.8rem;
-    }
-    .title-logo {
-        width: 38px;
-    }
-    .timer-display {
-        font-size: 4rem; /* Kalohet në vlerë fikse që të menaxhohet më mirë */
-    }
-}
-
-/* Ekstra për iPhone SE (Gjenerata 1), iPhone 5s, 5c, 5 (Ekrane me gjerësi 320px deri 360px) */
-@media (max-width: 360px) {
-    body {
-        padding: 8px; /* Reduktohet hapësira jashtë kutisë */
-    }
-    .timer-container {
-        padding: 20px 12px; /* Reduktohet padding brenda kutisë */
-    }
-    .header-container {
-        gap: 8px;
-        margin-bottom: 15px;
-        padding-bottom: 8px;
-    }
-    .timer-title {
-        font-size: 1.3rem; /* Zvogëlim drastik i shkronjave që të mos thyhen keq */
-    }
-    .title-logo {
-        width: 30px; /* Logo bëhet më kompakte */
-    }
-    .timer-display {
-        font-size: 3.1rem; /* Madhësia maksimale që nxë ekrani 320px pa dalë jashtë vijave */
-        letter-spacing: 0px;
-        margin: 20px 0;
-    }
-    .control-buttons {
-        flex-direction: column; /* Butonat vendosen njëri mbi tjetrin */
-        gap: 8px;
-    }
-    .btn {
-        width: 100%;
-        padding: 12px;
-        font-size: 0.95rem;
-    }
-    .btn.stop {
-        max-width: 100%; /* Edhe butoni stop merr hapësirë të plotë */
-    }
-}
-/* Stilet bazë për butonat Fullscreen */
 .btn.fullscreen {
     background-color: #6c757d;
     color: white;
 }
-
 .btn.fullscreen:hover {
     background-color: #5a6268;
 }
 
-/* --- LOGJIKA KRYESORE E FULLSCREEN --- */
+/* ==========================================================================
+   MEDIA QUERIES (Përshtatja responsive për ekrane të vogla)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .timer-title { font-size: 1.8rem; }
+    .title-logo { width: 38px; }
+    .timer-display { font-size: 4rem; }
+}
+
+@media (max-width: 360px) {
+    body { padding: 8px; }
+    .timer-container { padding: 20px 12px; }
+    .header-container { gap: 8px; margin-bottom: 15px; padding-bottom: 8px; }
+    .timer-title { font-size: 1.3rem; }
+    .title-logo { width: 30px; }
+    .timer-display { font-size: 3.1rem; letter-spacing: 0px; margin: 20px 0; }
+    .control-buttons { flex-direction: column; gap: 8px; }
+    .btn { width: 100%; padding: 12px; font-size: 0.95rem; }
+    .btn.stop { max-width: 100%; }
+}
+
+/* ==========================================================================
+   LOGJIKA E RE KRYESORE PËR MODIN FULLSCREEN
+   ========================================================================== */
 
 #timer-container:fullscreen {
     width: 100vw;
     height: 100vh;
-    background-color: #ffffff; /* Mund ta ndryshosh sipas dëshirës */
+    background-color: #ffffff; 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
     padding: 40px;
-    position: relative; /* Lejon pozicionimin absolut të butonave */
+    position: relative; 
 }
 
-/* Rritja e fotos (logos) në Fullscreen */
+/* Rritja e elementeve në Fullscreen */
 #timer-container:fullscreen .title-logo {
-    max-height: 250px; /* Fotoja rritet ndjeshëm */
+    max-height: 200px; 
     width: auto;
     margin-bottom: 20px;
 }
 
-/* Rritja e titullit në Fullscreen */
 #timer-container:fullscreen .timer-title {
     font-size: 4.5rem; 
     margin-bottom: 20px;
     text-align: center;
 }
 
-/* Rritja maksimale e kohëmatësit */
 #timer-container:fullscreen .timer-display {
-    font-size: 15rem; /* Shifrat bëhen gjigande për t'u parë qartë */
+    font-size: 15rem; 
     font-weight: bold;
     margin: 20px 0;
 }
 
-/* Pozicionimi i butonave poshtë në të djathtë (si kur luan, si kur është stop) */
+/* --- KONFIKUGURIMI I FSHEHJES SË BUTONAVE --- */
+
+/* 1. Zhduk plotësisht butonat Start, Stop, Reset, Edit në Fullscreen */
+#timer-container:fullscreen .btn:not(.fullscreen) {
+    display: none !important;
+}
+
+/* 2. Pozicionon vetëm kontejnerët e butonit Fullscreen poshtë djathtas */
 #timer-container:fullscreen #control-buttons,
 #timer-container:fullscreen #stop-container {
     position: absolute;
     bottom: 40px;
     right: 40px;
     display: flex;
-    gap: 15px; /* Hapësirë mes butonave */
+    opacity: 1;
+    transition: opacity 0.3s ease; /* Tranzicion i butë zvenitjeje */
 }
 
-/* Madhësia e butonave në Fullscreen */
-#timer-container:fullscreen .btn {
+/* 3. Kur shtohet kjo klasë nga JS (pas 3 sekondave), fsheh butonin e mbetur */
+#timer-container:fullscreen.hide-controls-fullscreen #control-buttons,
+#timer-container:fullscreen.hide-controls-fullscreen #stop-container {
+    opacity: 0;
+    pointer-events: none; /* Ndalon klikimin e padëshiruar kur nuk duket */
+}
+
+/* Stili i zmadhuar i butonit Exit Fullscreen */
+#timer-container:fullscreen .btn.fullscreen {
     font-size: 1.6rem;
     padding: 15px 35px;
     border-radius: 8px;
     cursor: pointer;
+    display: block !important; 
 }

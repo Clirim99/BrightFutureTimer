@@ -2,6 +2,7 @@
 let timeLeft = 5016; 
 let timerInterval = null;
 let isRunning = false;
+let mouseTimeout = null; // Timeout për fshehjen e butonave në Fullscreen
 
 // Marrja e elementeve nga HTML
 const display = document.getElementById('display');
@@ -65,7 +66,7 @@ function updateDisplay() {
     display.textContent = formatTime(timeLeft);
 }
 
-// Menaxhimi i pamjes së butonave gjatë punës së timer-it
+// Menaxhimi i pamjes së butonave gjatë punës së timer-it (kur nuk jemi në Fullscreen)
 function setRunningUI(running) {
     if (running) {
         controlButtons.style.display = 'none'; // Fsheh grupin e parë
@@ -100,6 +101,28 @@ function updateFullscreenButtons() {
     }
 }
 
+// --- LOGJIKA E RE PËR MAUSIN NË FULLSCREEN ---
+function handleMouseMoveFullscreen() {
+    const isFullscreen = !!getFullscreenElement();
+    if (!isFullscreen) return;
+
+    // Shfaq kontejnerët e butonave (duke hequr klasën fshehëse)
+    timerContainer.classList.remove('hide-controls-fullscreen');
+
+    // Pastro timeout-in e kaluar që të mos ndërpritet numërimi mbrapsht i 3 sekondave
+    clearTimeout(mouseTimeout);
+
+    // Fsheh butonat pas 3 sekondave (3000ms) nëse mausi ndalon së lëvizuri
+    mouseTimeout = setTimeout(() => {
+        if (!!getFullscreenElement()) {
+            timerContainer.classList.add('hide-controls-fullscreen');
+        }
+    }, 3000);
+}
+
+// Dëgjuesi i lëvizjes së mausit
+timerContainer.addEventListener('mousemove', handleMouseMoveFullscreen);
+
 // Ndërlidhja e dy butonave me funksionin Fullscreen
 if (btnFullscreen) {
     btnFullscreen.addEventListener('click', toggleFullscreen);
@@ -108,10 +131,19 @@ if (btnFullscreenStop) {
     btnFullscreenStop.addEventListener('click', toggleFullscreen);
 }
 
-// Përditësimi i tekstit të butonit dinamikisht
-document.addEventListener('fullscreenchange', updateFullscreenButtons);
-document.addEventListener('webkitfullscreenchange', updateFullscreenButtons);
-document.addEventListener('msfullscreenchange', updateFullscreenButtons);
+// Menaxhimi i eventeve të ndryshimit të ekranit (Fullscreen Change)
+const handleFullscreenChange = () => {
+    if (!getFullscreenElement()) {
+        // Nëse dalim nga Fullscreen, pastrojmë efektet e fshehjes automatike
+        clearTimeout(mouseTimeout);
+        timerContainer.classList.remove('hide-controls-fullscreen');
+    }
+    updateFullscreenButtons();
+};
+
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('msfullscreenchange', handleFullscreenChange);
 
 // Logjika e butonit Start
 btnStart.addEventListener('click', () => {
