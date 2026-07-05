@@ -46,7 +46,7 @@ btnStart.addEventListener('click', () => {
     if (isRunning || timeLeft <= 0) return;
     
     isRunning = true;
-    setRunningUI(true); // Fsheh butonat menjëherë pas klikimit të Start
+    setRunningUI(true); 
 
     timerInterval = setInterval(() => {
         if (timeLeft > 0) {
@@ -65,7 +65,7 @@ btnStart.addEventListener('click', () => {
 btnStop.addEventListener('click', () => {
     clearInterval(timerInterval);
     isRunning = false;
-    setRunningUI(false); // Rikthen panelin kryesor të butonave
+    setRunningUI(false); 
 });
 
 // Logjika e butonit Edit
@@ -97,7 +97,7 @@ btnReset.addEventListener('click', () => {
     clearInterval(timerInterval);
     isRunning = false;
     setRunningUI(false);
-    timeLeft = 5016; // Kthehet te koha fillestare
+    timeLeft = 5016; 
     updateDisplay();
 });
 
