@@ -1,13 +1,19 @@
 /* Rregullimi i background-it dhe pozicionit në qendër të ekranit */
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px; /* Shtuar padding që kutia të mos prekë skajet e telefonit */
     background-color: #f4f4f4;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Ndryshuar nga height në min-height për ekrane të vegjël */
+    box-sizing: border-box;
+}
+
+/* Siguron që padding mos të prishë gjerësinë e llogaritur */
+*, *:before, *:after {
+    box-sizing: inherit;
 }
 
 /* Kutia kryesore e timer-it */
@@ -15,9 +21,9 @@ body {
     text-align: center;
     background-color: #ffffff;
     padding: 40px 60px;
-    border-radius: 8px;
+    border-radius: 12px; /* Pak më e rrumbullakosur për pamje moderne */
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    width: 80%;
+    width: 100%; /* Ndryshuar në 100% që të përdorë hapësirën maksimale në telefon */
     max-width: 800px;
 }
 
@@ -28,6 +34,7 @@ body {
     font-weight: 300;
     margin-bottom: 20px;
     outline: none;
+    word-break: break-word; /* Parandalon daljen e tekstit të gjatë jashtë kutisë */
 }
 
 /* Numrat digjitalë të mëdhenj */
@@ -46,6 +53,7 @@ body {
     display: flex;
     justify-content: center;
     gap: 15px;
+    flex-wrap: wrap; /* Lejon butonat të kalojnë në rresht të ri nëse s'ka vend */
 }
 
 /* Stili i përgjithshëm i butonave */
@@ -54,10 +62,16 @@ body {
     font-size: 1rem;
     font-weight: 500;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
     color: white;
+    flex: 1; /* Butonat do të ndajnë hapësirën në mënyrë të barabartë */
+    min-width: 120px; /* Parandalon që butonat të bëhen tepër të vegjël */
+}
+
+.btn:active {
+    transform: scale(0.98); /* Efekt shtypjeje (tap) në telefon */
 }
 
 /* Ngjyrat për secilin buton */
@@ -72,3 +86,42 @@ body {
 
 .btn.stop { background-color: #dc3545; }
 .btn.stop:hover { background-color: #bd2130; }
+
+
+/* ==========================================================================
+   MEDIA QUERIES (Përshtatja për Telefona dhe Tabletë)
+   ========================================================================== */
+
+/* Për pajisjet me ekran mesatar (Tabletë dhe telefona të mëdhenj) */
+@media (max-width: 768px) {
+    .timer-container {
+        padding: 30px 25px; /* Zvogëlojmë padding e brendshëm */
+    }
+    .timer-display {
+        font-size: 5rem; /* Zvogëlojmë numrat që të nxënë vend */
+    }
+    .timer-title {
+        font-size: 2rem;
+    }
+}
+
+/* Për pajisjet me ekran të vogël (Telefona celularë) */
+@media (max-width: 480px) {
+    .timer-display {
+        font-size: 3.5rem; /* Madhësi perfekte për ekranet e telefonave */
+        letter-spacing: 1px;
+        margin: 20px 0;
+    }
+    .timer-title {
+        font-size: 1.6rem;
+    }
+    .control-buttons {
+        gap: 10px;
+        flex-direction: column; /* Ndryshon rreshtimin nga horizontal në vertikal */
+    }
+    .btn {
+        width: 100%; /* Butonat marrin 100% të gjerësisë për t'u shtypur më lehtë me gisht */
+        padding: 14px; /* Pak më shumë hapësirë vertikale për "touch" */
+        font-size: 1.1rem;
+    }
+}
